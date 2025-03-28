@@ -1,3 +1,5 @@
+import "webextension-polyfill";
+
 const DEFAULT_COUNTDOWN = 5;
 
 function detectAIContent() {

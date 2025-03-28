@@ -1,3 +1,5 @@
+import "webextension-polyfill";
+
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log("Message received: ", request);
   if (!sender.tab || !sender.tab.id) {
