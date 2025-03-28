@@ -1,5 +1,6 @@
 {
   "name": "close-youtube-ai-extension",
+  "type": "module",
   "version": "1.0.0",
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^16.0.1",
