@@ -2,6 +2,7 @@
   "name": "close-youtube-ai-extension",
   "version": "1.0.0",
   "devDependencies": {
+    "rollup": "^4.37.0",
     "webextension-polyfill": "^0.12.0"
   }
 }
