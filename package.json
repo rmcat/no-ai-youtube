@@ -1,0 +1,7 @@
+{
+  "name": "close-youtube-ai-extension",
+  "version": "1.0.0",
+  "devDependencies": {
+    "webextension-polyfill": "^0.12.0"
+  }
+}
