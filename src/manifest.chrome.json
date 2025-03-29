@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Auto-close YouTube AI Videos",
+  "name": "No AI YouTube",
   "version": "1.0",
-  "description": "Automatically close YouTube videos that contain altered or synthetic content.",
+  "description": "This extension identifies YouTube videos labeled as altered or synthetic content, halts playback, warns the user, and automatically navigates to the previous page unless explicitly canceled.",
   "permissions": ["tabs"],
   "host_permissions": ["https://www.youtube.com/*"],
   "content_scripts": [
