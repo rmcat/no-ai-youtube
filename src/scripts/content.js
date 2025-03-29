@@ -1,6 +1,6 @@
 import "webextension-polyfill";
 
-const DEFAULT_COUNTDOWN = 5;
+const DEFAULT_COUNTDOWN = 3;
 
 function detectAIContent() {
   return !!document.querySelector("ytd-app ytd-page-manager ytd-watch-metadata how-this-was-made-section-view-model");
@@ -21,9 +21,9 @@ function createElementWithStyles(tag, styles, textContent = "") {
   return element;
 }
 
-function createOverlay(actionMessage, countdown) {
+function createOverlay(countdown) {
   let timeLeft = countdown;
-  const getCountdownText = (seconds) => `${actionMessage} in ${seconds} seconds... Click to stay and smash dislike!`;
+  const getCountdownText = (seconds) => `Redirecting in ${seconds} seconds... Click to stay to smash dislike!`;
 
   // Create and style overlay
   const overlay = createElementWithStyles("div", {
@@ -61,7 +61,8 @@ function createOverlay(actionMessage, countdown) {
     if (timeLeft <= 0) {
       clearInterval(timer);
       browser.runtime.sendMessage({
-        action: "performAction",
+        action: "redirectTab",
+        currentUrl: window.location.href,
       });
     }
   }, 1000);
@@ -72,11 +73,7 @@ function observeDOM() {
     if (detectAIContent()) {
       observer.disconnect();
       stopPlayback();
-      browser.runtime.sendMessage({ action: "getAction" }).then((response) => {
-        if (response && response.actionMessage) {
-          createOverlay(response.actionMessage, DEFAULT_COUNTDOWN);
-        }
-      });
+      createOverlay(DEFAULT_COUNTDOWN);
     }
   });
 
