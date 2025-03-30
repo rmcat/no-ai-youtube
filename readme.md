@@ -1,4 +1,4 @@
-# No AI YouTube
+# ![Extension Icon](src/icons/icon-24.png) No AI YouTube
 
 This browser extension identifies YouTube videos labeled as **altered or synthetic content**, halts playback, warns the user, and automatically navigates to the previous page unless explicitly canceled.
 
@@ -28,4 +28,22 @@ This project uses Rollup to bundle the extension files. To package the extension
 
 ```bash
 npx rollup -c
+```
+
+### Updating Icons
+
+To regenerate and optimize icons:
+
+```bash
+INKSCAPE_EXE="<path_to_exe>"
+SIZES=(16 24 32 48 64 128 512)
+
+for SIZE in "${SIZES[@]}"; do
+  inputFile="src/icons/icon.svg"
+  outputFile="src/icons/icon-${SIZE}.png"
+  "${INKSCAPE_EXE}" --export-type="png" --export-filename="${outputFile}" --export-area-page --export-width=${SIZE} "${inputFile}"
+done
+
+OXIPNG="<path_to_exe>"
+"${OXIPNG}" --opt max --strip safe src/icons/*.png
 ```

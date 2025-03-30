@@ -22,6 +22,8 @@ export default [
         targets: [
           { src: "src/manifest.firefox.json", dest: "dist/firefox", rename: "manifest.json" },
           { src: "src/manifest.chrome.json", dest: "dist/chrome", rename: "manifest.json" },
+          { src: "src/icons/*.png", dest: "dist/firefox/icons" },
+          { src: "src/icons/*.png", dest: "dist/chrome/icons" },
         ],
       }),
     ],
