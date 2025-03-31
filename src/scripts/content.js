@@ -2,8 +2,15 @@ import "webextension-polyfill";
 
 const DEFAULT_COUNTDOWN = 3;
 
+function log(message) {
+  browser.runtime.sendMessage({ action: "log", message: message });
+}
+
 function detectAIContent() {
-  return !!document.querySelector("ytd-app ytd-page-manager ytd-watch-metadata how-this-was-made-section-view-model");
+  const aiMarker = document.querySelector("how-this-was-made-section-view-model");
+  const aiFound = !!aiMarker;
+  log(`aiFound=${aiFound}`);
+  return aiFound;
 }
 
 function stopPlayback() {
@@ -22,6 +29,7 @@ function createElementWithStyles(tag, styles, textContent = "") {
 }
 
 function createOverlay(countdown) {
+  log("Creating overlay");
   let timeLeft = countdown;
   const getCountdownText = (seconds) => `Redirecting in ${seconds} seconds... Click to stay to smash dislike!`;
 
@@ -60,6 +68,9 @@ function createOverlay(countdown) {
     countdownText.textContent = getCountdownText(timeLeft);
     if (timeLeft <= 0) {
       clearInterval(timer);
+
+      overlay.remove();
+
       browser.runtime.sendMessage({
         action: "redirectTab",
         currentUrl: window.location.href,
@@ -68,8 +79,22 @@ function createOverlay(countdown) {
   }, 1000);
 }
 
-function observeDOM() {
-  const observer = new MutationObserver(() => {
+let observer = null;
+
+function observeDOM(eventSource = "initial") {
+  const targetNode = document.querySelector("ytd-watch-flexy");
+  if (!targetNode) {
+    log(`ytd-watch-flexy not found in observeDOM(${eventSource}).`);
+    return;
+  }
+
+  log(`ytd-watch-flexy found in observeDOM(${eventSource})`);
+
+  if (observer) {
+    observer.disconnect();
+  }
+
+  observer = new MutationObserver(() => {
     if (detectAIContent()) {
       observer.disconnect();
       stopPlayback();
@@ -77,10 +102,12 @@ function observeDOM() {
     }
   });
 
-  observer.observe(document.body, {
+  observer.observe(targetNode, {
     childList: true,
     subtree: true,
   });
 }
 
 observeDOM();
+
+window.addEventListener("yt-navigate-finish", () => observeDOM("yt-navigate-finish"));

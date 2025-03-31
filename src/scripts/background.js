@@ -4,6 +4,13 @@ const isChromiumBased = isChromiumBasedUserAgent();
 console.debug("Background script loaded. Chromium-based:", isChromiumBased);
 
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "log") {
+    console.log("Content Script Log:", request.message, {
+      tabId: sender.tab?.id,
+      tabUrl: sender.tab?.url,
+    });
+  }
+
   console.debug("Received message:", request);
 
   if (!sender.tab || sender.tab.id === undefined) {
