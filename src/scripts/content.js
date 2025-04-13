@@ -115,7 +115,7 @@ function createOverlay() {
       fontWeight: "bold",
       fontSize: "medium",
     },
-    "Click to continue... If you don't like, smash dislike!"
+    "Click anywhere or press Esc to continue... If you don't like, smash dislike!"
   );
 
   dialogContainer.appendChild(topRow);
@@ -128,6 +128,15 @@ function createOverlay() {
   });
 
   document.body.appendChild(overlay);
+
+  function keyHandler(event) {
+    if (event.key == "Escape") {
+      overlay.remove();
+      document.removeEventListener("keydown", keyHandler);
+    }
+  }
+
+  document.addEventListener("keydown", keyHandler);
 }
 
 function createElementWithStyles(tag, styles, text) {
