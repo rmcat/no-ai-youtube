@@ -1,5 +1,9 @@
 import "webextension-polyfill";
 
+function log(message) {
+  browser.runtime.sendMessage({ action: "log", message: message });
+}
+
 function getHowThisWasMadeElement() {
   return document.querySelector("how-this-was-made-section-view-model");
 }
@@ -153,11 +157,11 @@ let observer = null;
 function observeDOM() {
   const targetNode = document.querySelector("ytd-watch-flexy");
   if (!targetNode) {
-    console.debug("Could not find ytd-watch-flexy");
+    log("Could not find ytd-watch-flexy");
     return;
   }
 
-  console.debug("Found ytd-watch-flexy element");
+  log("Found ytd-watch-flexy element");
 
   if (observer) {
     observer.disconnect();
