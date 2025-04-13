@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "No AI YouTube",
   "version": "1.0",
-  "description": "This extension identifies YouTube videos labeled as altered or synthetic content, halts playback, warns the user, and automatically navigates to the previous page unless explicitly canceled.",
+  "description": "This extension identifies YouTube videos labeled as altered or synthetic content, halts playback, and warns the user.",
   "permissions": ["tabs"],
   "host_permissions": ["https://www.youtube.com/*"],
   "content_scripts": [
@@ -32,5 +32,11 @@
     "64": "icons/icon-64.png",
     "128": "icons/icon-128.png",
     "512": "icons/icon-512.png"
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["images/logo.png"],
+      "matches": ["https://www.youtube.com/*"]
+    }
+  ]
 }
