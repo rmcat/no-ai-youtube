@@ -8,6 +8,15 @@ function getHowThisWasMadeElement() {
   return document.querySelector("how-this-was-made-section-view-model");
 }
 
+const detectedElementIds = new Set();
+
+function makeElementUnique(element) {
+  if (!element.dataset.uniqueId) {
+    element.dataset.uniqueId = crypto.randomUUID();
+  }
+  return element.dataset.uniqueId;
+}
+
 function stopPlayback() {
   document.querySelectorAll("video, audio").forEach((media) => {
     media.pause();
@@ -157,24 +166,36 @@ let observer = null;
 function observeDOM() {
   const targetNode = document.querySelector("ytd-watch-flexy");
   if (!targetNode) {
-    log("Could not find ytd-watch-flexy");
     return;
   }
 
-  log("Found ytd-watch-flexy element");
-
   if (observer) {
     observer.disconnect();
+    observer = null;
   }
 
-  observer = new MutationObserver(() => {
+  function checkElement(recheck) {
     const element = getHowThisWasMadeElement();
     if (element) {
-      observer.disconnect();
-      stopPlayback();
-      createOverlay(element);
+      if (observer) {
+        observer.disconnect();
+        observer = null;
+      }
+      const uniqueId = makeElementUnique(element);
+      if (!detectedElementIds.has(uniqueId)) {
+        detectedElementIds.add(uniqueId);
+        stopPlayback();
+        createOverlay(element);
+      } else {
+        // False positive!
+        if (!recheck) {
+          setTimeout(() => checkElement(true), 500);
+        }
+      }
     }
-  });
+  }
+
+  observer = new MutationObserver(() => checkElement(false));
 
   observer.observe(targetNode, {
     childList: true,
@@ -182,6 +203,6 @@ function observeDOM() {
   });
 }
 
-observeDOM();
-
 window.addEventListener("yt-navigate-finish", observeDOM);
+
+observeDOM();
