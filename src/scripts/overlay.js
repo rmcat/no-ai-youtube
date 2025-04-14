@@ -7,33 +7,8 @@ function createElementWithStyles(tag, styles, text) {
   return element;
 }
 
-export function createOverlay(sectionTitleText, bodyHeaderText, bodyText) {
-  const overlay = createElementWithStyles("div", {
-    position: "fixed",
-    top: "0",
-    left: "0",
-    width: "100vw",
-    height: "100vh",
-    backgroundColor: "rgba(39, 0, 0, 0.9)",
-    color: "white",
-    display: "flex",
-    zIndex: "9999",
-    overflow: "auto",
-  });
-
-  const dialogContainer = createElementWithStyles("div", {
-    display: "flex",
-    flexDirection: "column",
-    width: "80%",
-    maxWidth: "600px",
-    margin: "auto",
-    padding: "20px",
-    backgroundColor: "black",
-    borderRadius: "10px",
-    position: "relative",
-  });
-
-  const closeButton = createElementWithStyles(
+function createCloseButton() {
+  return createElementWithStyles(
     "button",
     {
       position: "absolute",
@@ -49,19 +24,9 @@ export function createOverlay(sectionTitleText, bodyHeaderText, bodyText) {
     },
     "X"
   );
+}
 
-  closeButton.addEventListener("click", () => {
-    overlay.remove();
-    document.removeEventListener("keydown", keyHandler);
-  });
-
-  dialogContainer.appendChild(closeButton);
-
-  const topRow = createElementWithStyles("div", {
-    display: "flex",
-    flexDirection: "row",
-  });
-
+function createImageContainer() {
   const imageContainer = createElementWithStyles("div", {
     display: "flex",
     justifyContent: "center",
@@ -70,10 +35,11 @@ export function createOverlay(sectionTitleText, bodyHeaderText, bodyText) {
 
   const image = document.createElement("img");
   image.src = browser.runtime.getURL("images/logo.png");
-
   imageContainer.appendChild(image);
-  dialogContainer.appendChild(imageContainer);
+  return imageContainer;
+}
 
+function createContentContainer(sectionTitleText, bodyHeaderText, bodyText) {
   const contentContainer = createElementWithStyles("div", {
     flex: "1",
     display: "flex",
@@ -97,10 +63,11 @@ export function createOverlay(sectionTitleText, bodyHeaderText, bodyText) {
     contentContainer.appendChild(textElement);
   }
 
-  topRow.appendChild(imageContainer);
-  topRow.appendChild(contentContainer);
+  return contentContainer;
+}
 
-  const footerContainer = createElementWithStyles(
+function createFooterContainer() {
+  return createElementWithStyles(
     "div",
     {
       display: "flex",
@@ -112,12 +79,65 @@ export function createOverlay(sectionTitleText, bodyHeaderText, bodyText) {
     },
     "Press Esc to continue... Don't forget to smash dislike!"
   );
+}
 
-  dialogContainer.appendChild(topRow);
-  dialogContainer.appendChild(footerContainer);
+function createTopRow(sectionTitleText, bodyHeaderText, bodyText) {
+  const topRow = createElementWithStyles("div", {
+    display: "flex",
+    flexDirection: "row",
+  });
 
-  overlay.appendChild(dialogContainer);
+  topRow.appendChild(createImageContainer());
+  topRow.appendChild(createContentContainer(sectionTitleText, bodyHeaderText, bodyText));
 
+  return topRow;
+}
+
+function createDialogContainer(sectionTitleText, bodyHeaderText, bodyText, closeButtonElement) {
+  const dialogContainer = createElementWithStyles("div", {
+    display: "flex",
+    flexDirection: "column",
+    width: "80%",
+    maxWidth: "600px",
+    margin: "auto",
+    padding: "20px",
+    backgroundColor: "black",
+    borderRadius: "10px",
+    position: "relative",
+  });
+
+  dialogContainer.appendChild(createTopRow(sectionTitleText, bodyHeaderText, bodyText));
+  dialogContainer.appendChild(createFooterContainer());
+  dialogContainer.appendChild(closeButtonElement);
+  return dialogContainer;
+}
+
+function createOverlayContainer() {
+  return createElementWithStyles("div", {
+    position: "fixed",
+    top: "0",
+    left: "0",
+    width: "100vw",
+    height: "100vh",
+    backgroundColor: "rgba(39, 0, 0, 0.9)",
+    color: "white",
+    display: "flex",
+    zIndex: "9999",
+    overflow: "auto",
+  });
+}
+
+export function createOverlay(sectionTitleText, bodyHeaderText, bodyText) {
+  const overlay = createOverlayContainer();
+  const closeButton = createCloseButton();
+  const dialog = createDialogContainer(sectionTitleText, bodyHeaderText, bodyText, closeButton);
+
+  closeButton.addEventListener("click", () => {
+    overlay.remove();
+    document.removeEventListener("keydown", keyHandler);
+  });
+
+  overlay.appendChild(dialog);
   document.body.appendChild(overlay);
 
   function keyHandler(event) {
@@ -126,6 +146,5 @@ export function createOverlay(sectionTitleText, bodyHeaderText, bodyText) {
       document.removeEventListener("keydown", keyHandler);
     }
   }
-
   document.addEventListener("keydown", keyHandler);
 }
