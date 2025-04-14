@@ -70,7 +70,32 @@ function createOverlay(sectionTitleText, bodyHeaderText, bodyText) {
     padding: "20px",
     backgroundColor: "black",
     borderRadius: "10px",
+    position: "relative",
   });
+
+  const closeButton = createElementWithStyles(
+    "button",
+    {
+      position: "absolute",
+      top: "10px",
+      right: "10px",
+      fontSize: "24px",
+      fontWeight: "bold",
+      backgroundColor: "transparent",
+      color: "white",
+      border: "none",
+      cursor: "pointer",
+      zIndex: "10001",
+    },
+    "X"
+  );
+
+  closeButton.addEventListener("click", () => {
+    overlay.remove();
+    document.removeEventListener("keydown", keyHandler);
+  });
+
+  dialogContainer.appendChild(closeButton);
 
   const topRow = createElementWithStyles("div", {
     display: "flex",
@@ -115,7 +140,7 @@ function createOverlay(sectionTitleText, bodyHeaderText, bodyText) {
   topRow.appendChild(imageContainer);
   topRow.appendChild(contentContainer);
 
-  const continueContainer = createElementWithStyles(
+  const footerContainer = createElementWithStyles(
     "div",
     {
       display: "flex",
@@ -125,17 +150,13 @@ function createOverlay(sectionTitleText, bodyHeaderText, bodyText) {
       fontWeight: "bold",
       fontSize: "medium",
     },
-    "Click anywhere or press Esc to continue... If you don't like, smash dislike!"
+    "Press Esc to continue... Don't forget to smash dislike!"
   );
 
   dialogContainer.appendChild(topRow);
-  dialogContainer.appendChild(continueContainer);
+  dialogContainer.appendChild(footerContainer);
 
   overlay.appendChild(dialogContainer);
-
-  overlay.addEventListener("click", () => {
-    overlay.remove();
-  });
 
   document.body.appendChild(overlay);
 
