@@ -5,7 +5,31 @@ function log(message) {
 }
 
 function getHowThisWasMadeElement() {
-  return document.querySelector("how-this-was-made-section-view-model");
+  const howThisWasMadeElement = document.querySelector("how-this-was-made-section-view-model");
+
+  if (!howThisWasMadeElement) {
+    return null;
+  }
+
+  const sectionTitleElement = howThisWasMadeElement.querySelector(".ytwHowThisWasMadeSectionViewModelSectionTitle span");
+  const sectionTitleText = sectionTitleElement?.textContent ?? "";
+
+  const bodyHeaderElement = howThisWasMadeElement.querySelector(".ytwHowThisWasMadeSectionViewModelBodyHeader span");
+  const bodyHeaderText = bodyHeaderElement?.textContent ?? "";
+
+  const bodyTextElement = howThisWasMadeElement.querySelector(".ytwHowThisWasMadeSectionViewModelBodyText span");
+  const bodyText = bodyTextElement?.textContent ?? "";
+
+  if (!bodyHeaderText.toLowerCase().includes("altered or synthetic")) {
+    return null;
+  }
+
+  return {
+    element: howThisWasMadeElement,
+    sectionTitleText: sectionTitleText,
+    bodyHeaderText: bodyHeaderText,
+    bodyText: bodyText,
+  };
 }
 
 const detectedElementIds = new Set();
@@ -23,34 +47,7 @@ function stopPlayback() {
   });
 }
 
-function createOverlay() {
-  const howThisWasMadeElement = document.querySelector("how-this-was-made-section-view-model");
-
-  let sectionTitleText = "";
-  let bodyHeaderText = "";
-  let bodyTextContent = "";
-
-  if (howThisWasMadeElement) {
-    const sectionTitleElement = howThisWasMadeElement.querySelector(".ytwHowThisWasMadeSectionViewModelSectionTitle span");
-    if (sectionTitleElement) {
-      sectionTitleText = sectionTitleElement.textContent;
-    }
-
-    const bodyHeaderElement = howThisWasMadeElement.querySelector(".ytwHowThisWasMadeSectionViewModelBodyHeader span");
-    if (bodyHeaderElement) {
-      bodyHeaderText = bodyHeaderElement.textContent;
-    }
-
-    const bodyTextElement = howThisWasMadeElement.querySelector(".ytwHowThisWasMadeSectionViewModelBodyText span");
-    if (bodyTextElement) {
-      bodyTextContent = bodyTextElement.textContent;
-    }
-  }
-
-  if (!sectionTitleText && !bodyHeaderText && !bodyTextContent) {
-    bodyHeaderText = "Altered or synthetic content detected.";
-  }
-
+function createOverlay(sectionTitleText, bodyHeaderText, bodyText) {
   const overlay = createElementWithStyles("div", {
     position: "fixed",
     top: "0",
@@ -110,8 +107,8 @@ function createOverlay() {
     contentContainer.appendChild(headerElement);
   }
 
-  if (bodyTextContent) {
-    const textElement = createElementWithStyles("div", { marginTop: "10px", fontSize: "large" }, bodyTextContent);
+  if (bodyText) {
+    const textElement = createElementWithStyles("div", { marginTop: "10px", fontSize: "large" }, bodyText);
     contentContainer.appendChild(textElement);
   }
 
@@ -175,17 +172,17 @@ function observeDOM() {
   }
 
   function checkElement(recheck) {
-    const element = getHowThisWasMadeElement();
-    if (element) {
+    const howThisWasMadeElement = getHowThisWasMadeElement();
+    if (howThisWasMadeElement) {
       if (observer) {
         observer.disconnect();
         observer = null;
       }
-      const uniqueId = makeElementUnique(element);
+      const uniqueId = makeElementUnique(howThisWasMadeElement.element);
       if (!detectedElementIds.has(uniqueId)) {
         detectedElementIds.add(uniqueId);
         stopPlayback();
-        createOverlay(element);
+        createOverlay(howThisWasMadeElement.sectionTitleText, howThisWasMadeElement.bodyHeaderText, howThisWasMadeElement.bodyText);
       } else {
         // False positive!
         if (!recheck) {
