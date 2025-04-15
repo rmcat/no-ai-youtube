@@ -77,7 +77,7 @@ function createFooterContainer() {
       fontWeight: "bold",
       fontSize: "medium",
     },
-    "Press Esc to continue... Don't forget to smash dislike!"
+    "Press Esc or click the X to dismiss this alert."
   );
 }
 
