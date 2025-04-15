@@ -1,5 +1,5 @@
 {
-  "name": "close-youtube-ai-extension",
+  "name": "no-ai-youtube",
   "type": "module",
   "version": "1.0.0",
   "devDependencies": {
