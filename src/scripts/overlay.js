@@ -1,3 +1,5 @@
+import "webextension-polyfill";
+
 function createElementWithStyles(tag, styles, text) {
   const element = document.createElement(tag);
   Object.assign(element.style, styles);

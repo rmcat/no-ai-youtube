@@ -1,9 +1,4 @@
-import "webextension-polyfill";
 import { createOverlay } from "./overlay.js";
-
-function log(message) {
-  browser.runtime.sendMessage({ action: "log", message: message });
-}
 
 function getHowThisWasMadeElement() {
   const howThisWasMadeElement = document.querySelector("how-this-was-made-section-view-model");

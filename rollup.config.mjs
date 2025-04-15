@@ -3,15 +3,15 @@ import copy from "rollup-plugin-copy";
 
 export default [
   {
-    input: "src/scripts/background.js",
+    input: "src/scripts/content.js",
     output: [
       {
-        file: "dist/firefox/scripts/background.bundle.js",
+        file: "dist/firefox/scripts/content.bundle.js",
         format: "iife",
         sourcemap: true,
       },
       {
-        file: "dist/chrome/scripts/background.bundle.js",
+        file: "dist/chrome/scripts/content.bundle.js",
         format: "iife",
         sourcemap: true,
       },
@@ -29,21 +29,5 @@ export default [
         ],
       }),
     ],
-  },
-  {
-    input: "src/scripts/content.js",
-    output: [
-      {
-        file: "dist/firefox/scripts/content.bundle.js",
-        format: "iife",
-        sourcemap: true,
-      },
-      {
-        file: "dist/chrome/scripts/content.bundle.js",
-        format: "iife",
-        sourcemap: true,
-      },
-    ],
-    plugins: [resolve()],
   },
 ];
