@@ -3,7 +3,7 @@
   "name": "No AI YouTube",
   "version": "1.0",
   "description": "Alerts users to YouTube videos labeled as altered or synthetic content.",
-  "permissions": ["tabs"],
+  "permissions": [],
   "host_permissions": ["https://www.youtube.com/*"],
   "content_scripts": [
     {
