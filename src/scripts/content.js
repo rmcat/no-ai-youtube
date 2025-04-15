@@ -71,7 +71,8 @@ function observeDOM() {
       const uniqueId = makeElementUnique(howThisWasMadeElement.element);
       if (!detectedElementIds.has(uniqueId)) {
         detectedElementIds.add(uniqueId);
-        stopPlayback();
+        // Add a slight delay to enhance reliability of stopping playback
+        setTimeout(stopPlayback, 100);
         createOverlay(howThisWasMadeElement.sectionTitleText, howThisWasMadeElement.bodyHeaderText, howThisWasMadeElement.bodyText);
       } else {
         // False positive on initial check, recheck might help if DOM is still updating
