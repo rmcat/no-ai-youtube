@@ -74,7 +74,7 @@ function observeDOM() {
         stopPlayback();
         createOverlay(howThisWasMadeElement.sectionTitleText, howThisWasMadeElement.bodyHeaderText, howThisWasMadeElement.bodyText);
       } else {
-        // False positive!
+        // False positive on initial check, recheck might help if DOM is still updating
         if (!recheck) {
           setTimeout(() => checkElement(true), 500);
         }
