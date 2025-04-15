@@ -1,7 +1,7 @@
 import "webextension-polyfill";
 
-const isChromiumBased = isChromiumBasedUserAgent();
-console.debug("Background script loaded. Chromium-based:", isChromiumBased);
+// const isChromiumBased = isChromiumBasedUserAgent();
+// console.debug("Background script loaded. Chromium-based:", isChromiumBased);
 
 browser.runtime.onMessage.addListener((request, sender, _sendResponse) => {
   if (request.action === "log") {
