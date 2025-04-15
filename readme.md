@@ -1,14 +1,8 @@
 # ![Extension Icon](src/icons/icon-24.png) No AI YouTube
 
-This browser extension identifies YouTube videos labeled as **altered or synthetic content**, halts playback, warns the user, and automatically navigates to the previous page unless explicitly canceled.
+This browser extension is designed for YouTube viewers frustrated with the Algorithm recommending misleading videos. It identifies YouTube videos labeled as **altered or synthetic content**, halts playback, and alerts the user.
 
-## Features
-
-- **Automatic Detection:** Identifies YouTube videos marked as "altered" or "synthetic content".
-- **Playback Prevention:** Immediately pauses video and audio playback.
-- **User Warning:** Presents a clear on-screen warning.
-- **Automatic Redirection:** Navigates back to the previous page after a brief countdown.
-- **User Cancellation:** Allows users to cancel the redirection.
+**Important note: This extension was primarily developed for my own use, so active maintenance and fixes are not guaranteed. It might break with YouTube updates. Feel free to report issues and submit fixes if you're able.**
 
 ## Developer Setup
 
