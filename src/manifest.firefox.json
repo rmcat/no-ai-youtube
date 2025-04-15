@@ -34,5 +34,10 @@
       "resources": ["images/logo.png"],
       "matches": ["https://www.youtube.com/*"]
     }
-  ]
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{e17ee6c6-9508-48a0-a588-18087f85c34c}"
+    }
+  }
 }
