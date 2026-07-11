@@ -1,4 +1,3 @@
-import "webextension-polyfill";
 
 function createElementWithStyles(tag, styles, text) {
   const element = document.createElement(tag);
@@ -36,7 +35,7 @@ function createImageContainer() {
   });
 
   const image = document.createElement("img");
-  image.src = browser.runtime.getURL("images/logo.png");
+  image.src = browser.runtime.getURL("icons/icon-128.png");
   imageContainer.appendChild(image);
   return imageContainer;
 }
@@ -129,7 +128,7 @@ function createOverlayContainer() {
   });
 }
 
-export function createOverlay(sectionTitleText, bodyHeaderText, bodyText) {
+function createOverlay(sectionTitleText, bodyHeaderText, bodyText) {
   const overlay = createOverlayContainer();
   const closeButton = createCloseButton();
   const dialog = createDialogContainer(sectionTitleText, bodyHeaderText, bodyText, closeButton);

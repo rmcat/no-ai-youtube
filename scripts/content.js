@@ -1,4 +1,3 @@
-import { createOverlay } from "./overlay.js";
 
 function getHowThisWasMadeElement() {
   const howThisWasMadeElement = document.querySelector("how-this-was-made-section-view-model");
