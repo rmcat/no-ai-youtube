@@ -1,151 +1,132 @@
 
-function createElementWithStyles(tag, styles, text) {
-  const element = document.createElement(tag);
-  Object.assign(element.style, styles);
-  if (text) {
-    element.textContent = text;
-  }
-  return element;
-}
-
-function createCloseButton() {
-  return createElementWithStyles(
-    "button",
-    {
-      position: "absolute",
-      top: "10px",
-      right: "10px",
-      fontSize: "24px",
-      fontWeight: "bold",
-      backgroundColor: "transparent",
-      color: "white",
-      border: "none",
-      cursor: "pointer",
-      zIndex: "10001",
-    },
-    "X"
-  );
-}
-
-function createImageContainer() {
-  const imageContainer = createElementWithStyles("div", {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "flex-start",
-  });
-
-  const image = document.createElement("img");
-  image.src = browser.runtime.getURL("icons/icon-128.png");
-  imageContainer.appendChild(image);
-  return imageContainer;
-}
-
-function createContentContainer(sectionTitleText, bodyHeaderText, bodyText) {
-  const contentContainer = createElementWithStyles("div", {
-    flex: "1",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    paddingLeft: "20px",
-  });
-
-  if (sectionTitleText) {
-    const titleElement = createElementWithStyles("div", { fontWeight: "bold", fontSize: "x-large" }, sectionTitleText);
-    contentContainer.appendChild(titleElement);
+const OVERLAY_STYLES = `
+  @keyframes noai-slide-in {
+    from { opacity: 0; transform: translateY(-12px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
-  if (bodyHeaderText) {
-    const headerElement = createElementWithStyles("div", { marginTop: "10px", fontSize: "large" }, bodyHeaderText);
-    contentContainer.appendChild(headerElement);
+  dialog.noai-dialog {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: min(520px, calc(100vw - 48px));
+    padding: 28px 28px 22px;
+    background: #1a1a1a;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-left: 4px solid #e63946;
+    border-radius: 14px;
+    color: #f1f1f1;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+    animation: noai-slide-in 0.22s ease-out both;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+    cursor: pointer;
+    outline: none;
   }
 
-  if (bodyText) {
-    const textElement = createElementWithStyles("div", { marginTop: "10px", fontSize: "large" }, bodyText);
-    contentContainer.appendChild(textElement);
+  dialog.noai-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.82);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
   }
 
-  return contentContainer;
-}
-
-function createFooterContainer() {
-  return createElementWithStyles(
-    "div",
-    {
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      marginTop: "20px",
-      fontWeight: "bold",
-      fontSize: "medium",
-    },
-    "Press Esc or click the X to dismiss this alert."
-  );
-}
-
-function createTopRow(sectionTitleText, bodyHeaderText, bodyText) {
-  const topRow = createElementWithStyles("div", {
-    display: "flex",
-    flexDirection: "row",
-  });
-
-  topRow.appendChild(createImageContainer());
-  topRow.appendChild(createContentContainer(sectionTitleText, bodyHeaderText, bodyText));
-
-  return topRow;
-}
-
-function createDialogContainer(sectionTitleText, bodyHeaderText, bodyText, closeButtonElement) {
-  const dialogContainer = createElementWithStyles("div", {
-    display: "flex",
-    flexDirection: "column",
-    width: "80%",
-    maxWidth: "600px",
-    margin: "auto",
-    padding: "20px",
-    backgroundColor: "black",
-    borderRadius: "10px",
-    position: "relative",
-  });
-
-  dialogContainer.appendChild(createTopRow(sectionTitleText, bodyHeaderText, bodyText));
-  dialogContainer.appendChild(createFooterContainer());
-  dialogContainer.appendChild(closeButtonElement);
-  return dialogContainer;
-}
-
-function createOverlayContainer() {
-  return createElementWithStyles("div", {
-    position: "fixed",
-    top: "0",
-    left: "0",
-    width: "100vw",
-    height: "100vh",
-    backgroundColor: "rgba(39, 0, 0, 0.9)",
-    color: "white",
-    display: "flex",
-    zIndex: "9999",
-    overflow: "auto",
-  });
-}
-
-function createOverlay(sectionTitleText, bodyHeaderText, bodyText) {
-  const overlay = createOverlayContainer();
-  const closeButton = createCloseButton();
-  const dialog = createDialogContainer(sectionTitleText, bodyHeaderText, bodyText, closeButton);
-
-  closeButton.addEventListener("click", () => {
-    overlay.remove();
-    document.removeEventListener("keydown", keyHandler);
-  });
-
-  overlay.appendChild(dialog);
-  document.body.appendChild(overlay);
-
-  function keyHandler(event) {
-    if (event.key == "Escape") {
-      overlay.remove();
-      document.removeEventListener("keydown", keyHandler);
-    }
+  .noai-top-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    pointer-events: none;
   }
-  document.addEventListener("keydown", keyHandler);
+
+  .noai-icon {
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    border-radius: 10px;
+  }
+
+  .noai-content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .noai-title {
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: #ffffff;
+  }
+
+  .noai-message {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #b0b0b0;
+  }
+
+  .noai-footer {
+    font-size: 14px;
+    color: #aaa;
+    text-align: center;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+`;
+
+function injectStyles() {
+  if (document.getElementById("noai-styles")) return;
+  const style = document.createElement("style");
+  style.id = "noai-styles";
+  style.textContent = OVERLAY_STYLES;
+  document.head.appendChild(style);
+}
+
+function createOverlay(title, message) {
+  injectStyles();
+
+  const dialog = document.createElement("dialog");
+  dialog.className = "noai-dialog";
+
+  const topRow = document.createElement("div");
+  topRow.className = "noai-top-row";
+
+  const icon = document.createElement("img");
+  icon.src = browser.runtime.getURL("icons/icon-128.png");
+  icon.className = "noai-icon";
+  icon.alt = "";
+
+  const content = document.createElement("div");
+  content.className = "noai-content";
+
+  if (title) {
+    const titleEl = document.createElement("div");
+    titleEl.className = "noai-title";
+    titleEl.textContent = title;
+    content.appendChild(titleEl);
+  }
+
+  if (message) {
+    const messageEl = document.createElement("div");
+    messageEl.className = "noai-message";
+    messageEl.textContent = message;
+    content.appendChild(messageEl);
+  }
+
+  topRow.appendChild(icon);
+  topRow.appendChild(content);
+
+  const footer = document.createElement("div");
+  footer.className = "noai-footer";
+  footer.textContent = "Click anywhere to dismiss";
+
+  dialog.appendChild(topRow);
+  dialog.appendChild(footer);
+  document.body.appendChild(dialog);
+  dialog.showModal();
+
+  function dismiss() {
+    dialog.close();
+    dialog.remove();
+  }
+
+  dialog.addEventListener("cancel", (e) => e.preventDefault());
+  dialog.addEventListener("click", dismiss);
 }

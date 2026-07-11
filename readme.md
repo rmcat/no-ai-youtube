@@ -1,43 +1,16 @@
-# ![Extension Icon](src/icons/icon-24.png) No AI YouTube
+## No AI YouTube
 
-This browser extension is designed for YouTube viewers frustrated with the Algorithm recommending misleading videos. It identifies YouTube videos labeled as **altered or synthetic content**, halts playback, and alerts the user.
+[![Firefox Add-on](https://img.shields.io/badge/Firefox-Add--on-blue?logo=firefox-browser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/no-ai-youtube/)
 
-**Important note: This extension was primarily developed for my own use, so active maintenance and fixes are not guaranteed. It might break with YouTube updates. Feel free to report issues and submit fixes if you're able.**
 
-## Developer Setup
+A simple, free, private, and open-source extension. Videos labeled by YouTube as "Made with AI" are immediately paused, and an alert is shown. No data is collected, and no data is sent.
 
-To build and package the extension from the source code, you will need Node.js and npm installed.
+Please note: This extension relies entirely on YouTube's labeling system. It cannot detect AI content if a creator fails to label their video honestly.
 
-### Install Dependencies
+### Installation (Local Development)
 
-Navigate to the project directory in your terminal and run:
-
-```bash
-npm install
-```
-
-### Package Extension
-
-This project uses Rollup to bundle the extension files. To package the extension for installation, run:
-
-```bash
-npx rollup -c
-```
-
-### Updating Icons
-
-To regenerate and optimize icons:
-
-```bash
-INKSCAPE_EXE="<path_to_exe>"
-SIZES=(16 24 32 48 64 128 512)
-
-for SIZE in "${SIZES[@]}"; do
-  inputFile="src/icons/icon.svg"
-  outputFile="src/icons/icon-${SIZE}.png"
-  "${INKSCAPE_EXE}" --export-type="png" --export-filename="${outputFile}" --export-area-page --export-width=${SIZE} "${inputFile}"
-done
-
-OXIPNG="<path_to_exe>"
-"${OXIPNG}" --opt max --strip safe src/icons/*.png
-```
+To load the extension in Firefox:
+1. Open Firefox and navigate to `about:debugging`.
+2. Click **This Firefox** on the left menu.
+3. Click **Load Temporary Add-on...**.
+4. Select the `manifest.json` file in the root of this project.
